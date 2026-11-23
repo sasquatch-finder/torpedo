@@ -3,7 +3,7 @@
     "path": "~/GitHub/torpedo/TorpedoBats.Rmd",
     "project_path": "TorpedoBats.Rmd",
     "type": "r_markdown",
-    "hash": "13163225",
+    "hash": "3350243628",
     "contents": "",
     "dirty": false,
     "created": 1795470782783.0,
@@ -13,15 +13,15 @@
         "source_window_id": "",
         "Source": "Source",
         "last_setup_crc32": "4088e4fcbb338d19",
-        "cursorPosition": "159,0",
-        "scrollLine": "148"
+        "cursorPosition": "158,0",
+        "scrollLine": "147"
     },
     "folds": "",
-    "lastKnownWriteTime": 1795473499,
+    "lastKnownWriteTime": 1795474392,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1795473499391,
+    "last_content_update": 1795474392755,
     "read_only": false,
     "read_only_alternatives": []
 }
