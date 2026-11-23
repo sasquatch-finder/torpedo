@@ -54,15 +54,108 @@ batdat_panel <- batdat %>%
     min(PA) >= 300
   ) %>%
   ungroup() %>%
-  mutate(HR_rate = HR / PA) %>%
-  
-  batdat_panel %>%
-  count(Season)
+  mutate(HR_rate = HR / PA)
 ```
 
 
+```{r}
+#check to see how many individual players remain
+batdat_panel %>%
+  summarise(
+    players = n_distinct(`Player-additional`),
+    observations = n()
+  )
+```
 
+## Create Torpedo Dataset
 
+```{r}
+library(tidyverse)
+library(stringi)
+
+torpedo_players <- tribble(
+  ~Player, ~Torpedo_2025,
+  "Anthony Volpe", 1,
+  "Cody Bellinger", 1,
+  "Jazz Chisholm Jr.", 1,
+  "Paul Goldschmidt", 1,
+  "Austin Wells", 1,
+  "Adley Rutschman", 1,
+  "Elly De La Cruz", 1,
+  "Jose Trevino", 1,
+  "Dansby Swanson", 1,
+  "Nico Hoerner", 1,
+  "Ryan Jeffers", 1,
+  "Francisco Lindor", 1,
+  "Junior Caminero", 1,
+  "Davis Schneider", 1,
+  "Alec Bohm", 1,
+  "Oneil Cruz", 1,
+  "Oliver Dunn", 1,
+  "Yandy Diaz", 1,
+  "Cal Raleigh", 1,
+  "Colson Montgomery", 1,
+  "Willson Contreras", 1
+)
+
+```
+### remove special characters from batdat_panel
+```{r}
+# create clean name function
+clean_name <- function(x) {
+  x %>%
+    str_remove_all("[*#]") %>%
+    str_squish() %>%
+    stri_trans_general("Latin-ASCII") %>%
+    str_to_lower()
+}
+```
+```{r}
+# use clean name on batdat_panel and torpedo_players
+batdat_panel$Player <- clean_name(batdat_panel$Player)
+
+batdat_panel$Player %>%
+  head()
+```
+```{r}
+# clean torpedo_player names
+torpedo_players$Player <- clean_name(torpedo_players$Player)
+torpedo_players$Player %>%
+  head()
+```
+### Merge Datasets
+
+```{r}
+batdat_panel <- batdat_panel %>%
+  mutate (Player) %>%
+  left_join(
+    torpedo_players %>%
+      select(Player, Torpedo_2025),
+    by = "Player"
+  ) %>%
+  mutate(
+    Torpedo_2025 = replace_na(Torpedo_2025, 0)
+  )
+```
+
+## Sort players with mutiple teams and combine
+
+```{r}
+batdat_clean <- batdat_panel %>%
+  group_by(Season, `Player-additional`) %>%
+  filter(
+    if (any(grepl("^[0-9]+TM$", Team))) {
+      grepl("^[0-9]+TM$", Team)
+    } else {
+      TRUE
+    }
+  ) %>%
+  ungroup()
+```
+
+```{r}
+sum(batdat_clean$Torpedo_2025)
+```
 
 
 
